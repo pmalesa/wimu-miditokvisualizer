@@ -8,6 +8,8 @@ import RangeSlider from './components/RangeSlider';
 import SingleValueSlider from './components/SingleValueSlider';
 import { ApiResponse } from './interfaces/ApiResponse';
 import ErrorBoundary from './components/ErrorBoundary';
+import { Tabs, TabList, Tab, TabPanel } from 'react-tabs';
+import 'react-tabs/style/react-tabs.css';
 
 function App() {
   const [responseData, setResponseData] = useState<ApiResponse | null>(null);
@@ -408,16 +410,26 @@ function App() {
           </div>
 
         </form>
-        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
-          <ErrorBoundary fallback={<p>Something went wrong</p>}>
-            {responseData?.data ? <MusicInfoDisplay data={responseData.data.metrics} /> : responseData?.error}
-          </ErrorBoundary>
-        </div>
-        <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '75%' }}>
-          <ErrorBoundary fallback={<p>Something went wrong</p>}>
-            {responseData?.data ? <DataDisplay data={responseData.data.tokens} /> : responseData?.error}
-          </ErrorBoundary>
-        </div>
+        {responseData && (
+        <Tabs>
+          <TabList>
+            <Tab>{selectedFile ? selectedFile.name : "Uploaded File"}</Tab>
+          </TabList>
+
+          <TabPanel>
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap' }}>
+              <ErrorBoundary fallback={<p>Something went wrong</p>}>
+                {responseData?.data ? <MusicInfoDisplay data={responseData.data.metrics} /> : responseData?.error}
+              </ErrorBoundary>
+            </div>
+            <div style={{ overflowX: 'auto', whiteSpace: 'nowrap', maxWidth: '75%' }}>
+              <ErrorBoundary fallback={<p>Something went wrong</p>}>
+                {responseData?.data ? <DataDisplay data={responseData.data.tokens} /> : responseData?.error}
+              </ErrorBoundary>
+            </div>
+          </TabPanel>
+        </Tabs>
+      )}
       </header>
     </div>
   );
